@@ -1,0 +1,39 @@
+<html>
+  <head>
+    <title>Canvas tutorial</title>
+    <head></head>
+ 
+    <style type="text/css">
+      canvas { border: 1px solid black; }
+    </style>
+  </head>
+  <body>
+
+
+    <div>  
+    <video id="live" width="320" height="240" autoplay></video>  
+    </div>  
+   <script type="text/javascript">
+
+
+
+video = document.getElementById("live")  
+alert(navigator);
+    var ctx;  
+    // use the chrome specific GetUserMedia function  
+    navigator.webkitGetUserMedia("video",  
+            function(stream) {  
+                video.src = webkitURL.createObjectURL(stream);  
+            },  
+            function(err) {  
+                console.log("Unable to get video stream!")  
+            }  
+    )  
+   alert(video.src);
+
+        
+      
+    </script>
+
+  </body>
+</html>

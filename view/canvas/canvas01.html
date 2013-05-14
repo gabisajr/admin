@@ -1,0 +1,83 @@
+
+<html>
+  <head>
+    <title>Canvas tutorial</title>
+    <head></head>
+    <script type="text/javascript">
+      function draw(){
+        var canvas = document.getElementById('tutorial');
+        if (canvas.getContext){
+          var context = canvas.getContext('2d');
+        }
+       for(var x=0.5;x<950;x += 10){
+        context.moveTo(x,0);
+        context.lineTo(x,600);
+        }
+        //画横线
+        for(var y=0.5;y<600;y += 10){
+               context.moveTo(0,y);
+               context.lineTo(950,y);
+        }
+        //选择颜色
+        context.strokeStyle = "#ccc";
+        //渲染
+        context.stroke();
+
+        //画一个矩形
+        context.rect();
+        context.fillRect(0,0,10,10);
+        context.fillStyle = "#ccc";
+        context.stroke();
+
+        var img = new Image();
+        img.src = "../../img/1.png";
+        img.alt = "ddddddddd";
+    //    alert(img.src);
+        context.width = img.width;
+        context.height = img.height;
+        context.drawImage(img,0,0);
+
+        var img2 = new Image();
+        img2.src = "../../img/2.png";
+      //  alert(img2.src);
+        context.width = img2.width;
+        context.height = img2.height;
+        context.drawImage(img2,100,300);
+
+        var img3 = new Image();
+        img3.src = "../../img/1.png";
+   //     alert(img2.src);
+        context.width = img3.width;
+        context.height = img3.height;
+        context.drawImage(img3,50,50);
+
+
+        var image_path = "../../img/1.png";  
+        
+        var img4 = new Image();  
+        img4.src = image_path;   //图片路径  
+        img4.top_x = 100;  //图片左上角横坐标  
+        img4.top_y = 500;  //图片左上角纵坐标  
+        img4.title = "ddddddddddddd";
+         //绘制图片到画布上  
+        img4.onload = function(){  
+                alert("onload");
+                context.drawImage(this,this.top_x,this.top_y,this.width,this.height);  
+        }  
+        img4.onmouseover = function(){  
+            alert("im click");  
+        } 
+          
+        
+        
+      }
+    </script>
+    <style type="text/css">
+      canvas { border: 1px solid black; }
+    </style>
+  </head>
+  <body onload="draw();">
+    <canvas id="tutorial" width="950" height="600">
+    </canvas>
+  </body>
+</html>

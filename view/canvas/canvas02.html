@@ -1,0 +1,30 @@
+
+<html>
+  <head>
+    <title>Canvas tutorial</title>
+    <head></head>
+    <script type="text/javascript">
+
+
+      function draw(){
+
+
+context = new webkitAudioContext();
+
+      
+      var c=document.getElementById("tutorial");
+      var ctx=c.getContext("2d");
+      ctx.strokeRect(5,5,25,15);
+      ctx.scale(2,2);
+      ctx.strokeRect(5,5,25,15);
+        
+      }
+    </script>
+    <style type="text/css">
+      canvas { border: 1px solid black; }
+    </style>
+  </head>
+  <body onload="draw();">
+    <canvas id="tutorial" width="950" height="600"></canvas>
+  </body>
+</html>

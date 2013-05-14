@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>HTML5 Canvas 入门</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <head>
+    <body>
+        <canvas id="my-canvas" width="500" height="500"><canvas>
+        <script>
+        var x=document.getElementById("my-canvas");
+function getLocation()
+  {
+  if (navigator.geolocation)
+    {
+    navigator.geolocation.watchPosition(showPosition);
+    }
+  else{x.innerHTML="Geolocation is not supported by this browser.";}
+  }()
+function showPosition(position)
+  {
+  x.innerHTML="Latitude: " + position.coords.latitude +
+  "<br />Longitude: " + position.coords.longitude;
+  }
+        </script>
+    </body>
+</html>

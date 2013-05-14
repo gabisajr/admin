@@ -1,0 +1,39 @@
+<html>
+  <head>
+    <title>Canvas tutorial</title>
+    <head></head>
+ 
+    <style type="text/css">
+      canvas { border: 1px solid black; }
+    </style>
+  </head>
+  <body>
+
+
+    <div>  
+    <video id="live" width="320" height="240" autoplay></video>  
+    </div>  
+   <script type="text/javascript">
+
+      var context;
+      window.addEventListener('load', init, false);
+      function init() {
+        // success callback when requesting audio input stream
+function gotStream(stream) {
+    var audioContext = new webkitAudioContext();
+
+    // Create an AudioNode from the stream.
+    var mediaStreamSource = audioContext.createMediaStreamSource( stream );
+
+    // Connect it to the destination to hear yourself (or any other node for processing!)
+    mediaStreamSource.connect( audioContext.destination );
+}
+
+navigator.webkitGetUserMedia( {audio:true}, gotStream );
+
+      }
+      
+    </script>
+
+  </body>
+</html>
