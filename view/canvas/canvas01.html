@@ -5,9 +5,10 @@
     <head></head>
     <script type="text/javascript">
       function draw(){
+       var context;
         var canvas = document.getElementById('tutorial');
         if (canvas.getContext){
-          var context = canvas.getContext('2d');
+           context = canvas.getContext('2d');
         }
        for(var x=0.5;x<950;x += 10){
         context.moveTo(x,0);
@@ -18,66 +19,85 @@
                context.moveTo(0,y);
                context.lineTo(950,y);
         }
-        //选择颜色
-        context.strokeStyle = "#ccc";
-        //渲染
-        context.stroke();
+        context.strokeStyle = "#ccc"; //选择颜色
+        context.stroke();  //渲染
 
-        //画一个矩形
-        context.rect();
-        context.fillRect(0,0,10,10);
-        context.fillStyle = "#ccc";
-        context.stroke();
+        var list = []; //保存所有的图形
+        var unit = function(img, imgSrc, name, x, y, description){
+          this.imgSrc = imgSrc;
+          this.name = name;
+          this.description = description;
+          this.isCurrent = false;
+          this.x = x;
+          this.y = y;
+          img = new Image();
+          img.src = imgSrc;
+          this.image = img;
+          this.drawUnit = function(context){
+                context.save();
+                context.width = img.width;
+                context.height = img.height;
+                context.drawImage(img,this.x,this.y);
+                list.push(this);
+          }
+        }
 
-        var img = new Image();
-        img.src = "../../img/1.png";
-        img.alt = "ddddddddd";
-    //    alert(img.src);
-        context.width = img.width;
-        context.height = img.height;
-        context.drawImage(img,0,0);
+        var testImg = new unit("hh","../../img/1.png","test", 100,500,"name:LiLei");
+        testImg.drawUnit(context);
 
-        var img2 = new Image();
-        img2.src = "../../img/2.png";
-      //  alert(img2.src);
-        context.width = img2.width;
-        context.height = img2.height;
-        context.drawImage(img2,100,300);
-
-        var img3 = new Image();
-        img3.src = "../../img/1.png";
-   //     alert(img2.src);
-        context.width = img3.width;
-        context.height = img3.height;
-        context.drawImage(img3,50,50);
+        var testImg2 = new unit("hhrr","../../img/1.png","test",400, 500,  "name:HanMeimei");
+        testImg2.drawUnit(context);
 
 
-        var image_path = "../../img/1.png";  
-        
-        var img4 = new Image();  
-        img4.src = image_path;   //图片路径  
-        img4.top_x = 100;  //图片左上角横坐标  
-        img4.top_y = 500;  //图片左上角纵坐标  
-        img4.title = "ddddddddddddd";
-         //绘制图片到画布上  
-        img4.onload = function(){  
-                alert("onload");
-                context.drawImage(this,this.top_x,this.top_y,this.width,this.height);  
-        }  
-        img4.onmouseover = function(){  
-            alert("im click");  
-        } 
-          
-        
-        
-      }
+        var testImg3 = new unit("hh","../../img/1.png","test", 0,0,"name:Lssi");
+        testImg3.drawUnit(context);
+
+        var testImg4 = new unit("hhrr","../../img/1.png","test",50, 50,  "name:Divid");
+        testImg4.drawUnit(context);
+
+        canvas.addEventListener('mousedown', function onMousedown(evt) {   
+             // 获取鼠标在 canvas 中的坐标位置  
+             var g_x;
+             var g_y;
+             if (evt.layerX || evt.layerX == 0) {   
+                 g_x = evt.layerX ;   
+                 g_y = evt.layerY ;   
+             }  
+             for (var i = list.length - 1; i >= 0; i--) {
+                 var temp  =  list[i];
+                    if(g_x  >= parseInt(temp.x) &&  
+                      g_x  <= parseInt(temp.x) + parseInt(temp.image.width) &&  
+                      g_y >= parseInt(temp.y) &&  
+                      g_y <= parseInt(temp.y) + parseInt(temp.image.height)){  
+                  //    alert (temp.description);    //位于图片中  
+                  var showDiv =   document.getElementById("showDiv");
+                      showDiv.innerHTML = temp.description;
+
+                    showDiv.style.display="block"; //div3初始状态是不可见的，设置可为可见   
+                    //window.event代表事件状态，如事件发生的元素，键盘状态，鼠标位置和鼠标按钮状.   
+                    //clientX是鼠标指针位置相对于窗口客户区域的 x 坐标，其中客户区域不包括窗口自身的控件和滚动条。   
+                    showDiv.style.left=g_x+15; //鼠标目前在X轴上的位置，加15是为了向右边移动15个px方便看到内容   
+                    showDiv.style.top=g_y+15;   
+                    showDiv.style.position="absolute"; //必须指定这个属性，否则showDiv层无法跟着鼠标动  
+                   }
+             };       
+        } , true);   
+
+        canvas.addEventListener('mousemove', function onMousemove(evt) {   
+              document.getElementById("showDiv");
+              showDiv.style.display="none"; //div3初始状态是不可见的，设置可为可见   
+                     } , true);   
+              }
     </script>
     <style type="text/css">
       canvas { border: 1px solid black; }
     </style>
   </head>
   <body onload="draw();">
-    <canvas id="tutorial" width="950" height="600">
+    <canvas id="tutorial" width="950" height="600"/>
     </canvas>
+
+    <div id="showDiv" style="display:none;background-color:beige;width:150;height:50">   
+</div>  
   </body>
 </html>
