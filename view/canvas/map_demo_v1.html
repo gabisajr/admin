@@ -40,8 +40,11 @@
           img = new Image();
           img.src = imgSrc;
           this.image = img;
+
+          
+
+
           this.drawUnit = function(context){
-                context.save();
                 context.width = img.width;
                 context.height = img.height;
                 context.drawImage(img,this.x,this.y);
@@ -49,15 +52,16 @@
           }
         }
 
+        var testImg3 = new unit("hh","../../img/1.png","test", 0,0,"name:Lssi");
+        testImg3.drawUnit(context);
+
         var testImg = new unit("hh","../../img/1.png","test", 100,500,"name:LiLei");
         testImg.drawUnit(context);
 
+      
         var testImg2 = new unit("hhrr","../../img/1.png","test",400, 500,  "name:HanMeimei");
         testImg2.drawUnit(context);
 
-
-        var testImg3 = new unit("hh","../../img/1.png","test", 0,0,"name:Lssi");
-        testImg3.drawUnit(context);
 
         var testImg4 = new unit("hhrr","../../img/1.png","test",50, 50,  "name:Divid");
         testImg4.drawUnit(context);
@@ -152,6 +156,13 @@
       <button class="btn btn-primary" type="button">Vedio Control</button>
       <button class="btn btn-primary" type="button">Audio Control</button>
       <button class="btn btn-primary" type="button">Speak To Mobile Unit</button>
+      Display:
+      <select class="span2">
+        <option>25%</option>
+        <option>50%</option>
+        <option>75%</option>
+        <option>100%</option>
+      </select>
     </div>
 
 

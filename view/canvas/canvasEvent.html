@@ -14,9 +14,10 @@
                 this.isCurrent = false;
                 this.drawC = function(ctx, x, y) {
                     ctx.save();
-                    ctx.beginPath();
-                    ctx.moveTo(this.x, this.y - this.r);
-                    ctx.arc(this.x, this.y, this.r, 2 * Math.PI, 0, true);
+                    img = new Image();
+                    img.src = "../../img/1.png"
+                    ctx.drawImage(img, x, y);
+                
                     if((x && y && ctx.isPointInPath(x, y) && !currentC ) || this.isCurrent) {
 
                         ctx.fillStyle = '#ff0000';
@@ -26,7 +27,6 @@
                     } else {
                         ctx.fillStyle = '#999999';
                     }
-                    ctx.fill();
                 }
             }
             function draw() {
@@ -34,7 +34,7 @@
                 if(canvas.getContext) {
                     var ctx = canvas.getContext('2d');
                     for(var i = 0; i < 10; i++) {
-                        var c = new cricle(20 * i, 20 * i, 5 * i);
+                        var c = new cricle(100, 201, 5);
                         c.drawC(ctx);
                         list.push(c);
                     }
