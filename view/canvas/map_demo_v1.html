@@ -3,8 +3,13 @@
   <head>
     <title>Canvas tutorial</title>
     <head></head>
+    <style type="text/css">
+      * {padding: 0; margin:0;}
+    </style>
+        <link href="../../css/bootstrap.min.css" rel="stylesheet" media="screen">
+
     <script type="text/javascript">
-      function draw(){
+     window.onload = function(){
        var context;
         var canvas = document.getElementById('tutorial');
         if (canvas.getContext){
@@ -23,11 +28,13 @@
         context.stroke();  //渲染
 
         var list = []; //保存所有的图形
+        var currentUnit ;
         var unit = function(img, imgSrc, name, x, y, description){
           this.imgSrc = imgSrc;
           this.name = name;
           this.description = description;
           this.isCurrent = false;
+          currentUnit = null;
           this.x = x;
           this.y = y;
           img = new Image();
@@ -55,6 +62,51 @@
         var testImg4 = new unit("hhrr","../../img/1.png","test",50, 50,  "name:Divid");
         testImg4.drawUnit(context);
 
+        function onMouseDwon(evt){
+           var g_x;
+             var g_y;
+             if (evt.layerX || evt.layerX == 0) {   
+                 g_x = evt.layerX ;   
+                 g_y = evt.layerY ;   
+             }  
+             for (var i = list.length - 1; i >= 0; i--) {
+                 var temp  =  list[i];
+                    if(g_x  >= parseInt(temp.x) &&  
+                      g_x  <= parseInt(temp.x) + parseInt(temp.image.width) &&  
+                      g_y >= parseInt(temp.y) &&  
+                      g_y <= parseInt(temp.y) + parseInt(temp.image.height)){  
+
+                      currentUnit = temp;
+                  //    alert (temp.description);    //位于图片中  
+                  var showDiv =   document.getElementById("showDiv");
+                      showDiv.innerHTML = temp.description;
+
+                    showDiv.style.display="block"; //div3初始状态是不可见的，设置可为可见   
+                    //window.event代表事件状态，如事件发生的元素，键盘状态，鼠标位置和鼠标按钮状.   
+                    //clientX是鼠标指针位置相对于窗口客户区域的 x 坐标，其中客户区域不包括窗口自身的控件和滚动条。   
+                    showDiv.style.left=g_x+15; //鼠标目前在X轴上的位置，加15是为了向右边移动15个px方便看到内容   
+                    showDiv.style.top=g_y+100;   
+                    showDiv.style.position="absolute"; //必须指定这个属性，否则showDiv层无法跟着鼠标动  
+                   }
+             }       
+
+        }
+
+        function onMouseUp(evt){
+              document.getElementById("showDiv");
+              showDiv.style.display="none"; //div3初始状态是不可见的，设置可为可见
+        }
+
+        function onMouseMove(evt){
+          if(currentUnit){
+         //alert(currentUnit.description);        
+        }
+        }
+       
+        canvas.onmousedown = onMouseDwon;
+        canvas.onmouseup = onMouseUp;
+        canvas.onmousemove = onMouseMove;
+/*
         canvas.addEventListener('mousedown', function onMousedown(evt) {   
              // 获取鼠标在 canvas 中的坐标位置  
              var g_x;
@@ -83,19 +135,54 @@
              };       
         } , true);   
 
-        canvas.addEventListener('mousemove', function onMousemove(evt) {   
+        canvas.addEventListener('mouseup', function onMouseup(evt) {   
               document.getElementById("showDiv");
               showDiv.style.display="none"; //div3初始状态是不可见的，设置可为可见   
                      } , true);   
+*/
               }
     </script>
     <style type="text/css">
       canvas { border: 1px solid black; }
     </style>
   </head>
-  <body onload="draw();">
-    <canvas id="tutorial" width="950" height="600"/></canvas>
-    <div id="showDiv" style="display:none;background-color:beige;width:150;height:50">   
-</div>  
+  <body> 
+    <div  class="span10">
+      <h3>control</h3>
+      <button class="btn btn-primary" type="button">Vedio Control</button>
+      <button class="btn btn-primary" type="button">Audio Control</button>
+      <button class="btn btn-primary" type="button">Speak To Mobile Unit</button>
+    </div>
+
+
+
+
+    <div class="container-fluid">
+  <div class="row-fluid">
+    <div class="span9">
+           <canvas id="tutorial" width="950" height="600"/></canvas>
+
+    </div>
+    <div class="span3">
+       <div  style="display:block;background-color:beige;width:150;height:500">
+          mobile unit console:
+
+          <lable>add mobile unit mark</lable>
+          <ul>
+              <li>1</li>
+              <li>2</li>   
+              <li>3</li>   
+              <li>4</li>
+          </ul>
+
+        </div>  
+
+
+       <div id="showDiv" style="display:none;background-color:beige;width:150;height:50"> </div>  
+
+    </div>
+  </div>
+</div>
+    
   </body>
 </html>
