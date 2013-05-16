@@ -29,10 +29,11 @@
 
         var list = []; //保存所有的图形
         var currentUnit ;
-        var unit = function(img, imgSrc, name, x, y, description){
+        var unit = function(id, imgSrc, name, x, y, description){
           this.imgSrc = imgSrc;
           this.name = name;
           this.description = description;
+          this.id = id;
           this.isCurrent = false;
           currentUnit = null;
           this.x = x;

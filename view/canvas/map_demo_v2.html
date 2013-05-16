@@ -1,0 +1,223 @@
+
+<html>
+  <head>
+    <title>Canvas tutorial</title>
+    <head></head>
+    <style type="text/css">
+      * {padding: 0; margin:0;}
+    </style>
+        <link href="../../css/bootstrap.min.css" rel="stylesheet" media="screen">
+
+  
+    <style type="text/css">
+      canvas { border: 1px solid black; }
+    </style>
+  </head>
+  <body> 
+    <div  class="span10">
+      <h3>control</h3>
+      <button class="btn btn-primary" type="button">Vedio Control</button>
+      <button class="btn btn-primary" type="button">Audio Control</button>
+      <button class="btn btn-primary" type="button">Speak To Mobile Unit</button>
+      Display:
+      <select class="span2" id="display">
+        <option value="0">normal</option>
+        <option value="1">25%</option>
+        <option value="2">50%</option>
+        <option value="4">100%</option>
+      </select>
+    </div>
+    <div class="container-fluid">
+  <div class="row-fluid">
+    <div class="span9">
+           <canvas id="tutorial" width="950" height="600"/></canvas>
+
+    </div>
+    <div class="span3">
+       <div  style="display:block;background-color:beige;width:150;height:500">
+          mobile unit console:
+
+          <lable>add mobile unit mark</lable>
+          <ul>
+              <li>1</li>
+              <li>2</li>   
+              <li>3</li>   
+              <li>4</li>
+          </ul>
+        </div>  
+       <div id="showDiv" style="display:none;background-color:beige;width:150;height:50"> </div>  
+    </div>
+  </div>
+</div>
+
+
+  <script type="text/javascript">
+     var init = function(multiple, mobileUnits){
+      
+        var list = []; //保存所有的图形
+        var currentUnit ;
+
+       context =  getCanvasContext( {
+        scaleX : multiple,
+        scaleY : multiple
+       })
+       canvas = getCanvas();
+
+        drawGrid(context);
+      
+        for (var i = mobileUnits.length - 1; i >= 0; i--) {
+          var u =   mobileUnits[i]; //object
+          u.drawUnit(context);
+          list.push(u);
+        };
+ 
+        function onMouseDwon(evt){
+             var g_x;
+             var g_y;
+             if (evt.layerX || evt.layerX == 0) {   
+                 g_x = evt.layerX ;   
+                 g_y = evt.layerY ;   
+             }  
+             for (var i = list.length - 1; i >= 0; i--) {
+                 var temp  =  list[i];
+                    if(g_x  >= parseInt(temp.x) &&  
+                      g_x  <= parseInt(temp.x) + parseInt(temp.image.width) &&  
+                      g_y >= parseInt(temp.y) &&  
+                      g_y <= parseInt(temp.y) + parseInt(temp.image.height)){  
+                      currentUnit = temp;
+                      var showDiv =   document.getElementById("showDiv");
+                      showDiv.innerHTML = temp.description;
+                    showDiv.style.display="block"; //div3初始状态是不可见的，设置可为可见   
+                    //window.event代表事件状态，如事件发生的元素，键盘状态，鼠标位置和鼠标按钮状.   
+                    //clientX是鼠标指针位置相对于窗口客户区域的 x 坐标，其中客户区域不包括窗口自身的控件和滚动条。   
+                    showDiv.style.left=g_x+15; //鼠标目前在X轴上的位置，加15是为了向右边移动15个px方便看到内容   
+                    showDiv.style.top=g_y+100;   
+                    showDiv.style.position="absolute"; //必须指定这个属性，否则showDiv层无法跟着鼠标动  
+                   }
+             }    
+           }
+
+      
+
+        function onMouseMove(evt){
+              document.getElementById("showDiv");
+              showDiv.style.display="none"; 
+        }
+       
+
+        canvas.onmousedown = onMouseDwon;
+        canvas.onmousemove = onMouseMove;
+
+       }
+
+      /*
+       *drawGrid
+       */
+       function drawGrid(context){
+         
+         for(var x=0.5;x<950;x += 10){
+          context.moveTo(x,0);
+          context.lineTo(x,600);
+          }
+          //画横线
+          for(var y=0.5;y<600;y += 10){
+                 context.moveTo(0,y);
+                 context.lineTo(950,y);
+          }
+          context.strokeStyle = "#ccc"; //选择颜色
+          context.stroke();  //渲染
+       }
+
+        //mobileUnit object
+         function MobileUnit(id, imgSrc, name, x, y, description, context){
+        
+          this.imgSrc = imgSrc;
+          this.name = name;
+          this.description = description;
+          this.id = id;
+          this.isCurrent = false;
+          currentUnit = null;
+          this.x = x;
+          this.y = y;
+          var img = new Image();
+          img.src = imgSrc;
+          this.image = img;
+          this.drawUnit = function(context){
+                context.width = img.width;
+                context.height = img.height;
+                   preImage(img,function(){
+                   context.drawImage(img,x,y);
+
+                });
+          }
+       }
+
+
+       //make img loaded before canvas draw it 
+       function preImage(img,callback){  
+        if (img.complete) { // 如果图片已经存在于浏览器缓存，直接调用回调函数  
+             callback.call(img);  
+            return; // 直接返回，不用再处理onload事件  
+         }  
+      
+         img.onload = function () { //图片下载完毕时异步调用callback函数。  
+             callback.call(img);//将回调函数的this替换为Image对象  
+         };  
+      }  
+
+
+      function getCanvasContext(config){
+          var context;
+          var canvas = getCanvas();
+         if (canvas.getContext){
+             context = canvas.getContext('2d');
+         }  
+         context.scale(config.scaleX, config.scaleY);
+         return context;
+
+      }
+
+      function getCanvas(){
+        return document.getElementById('tutorial');
+      }
+
+      function clear(){
+          var context;
+          var canvas = getCanvas();
+         if (canvas.getContext){
+             context = canvas.getContext('2d');
+         }         
+         context.clearRect(0,0,950,600);
+      }
+
+
+
+       var u1 = new MobileUnit("1", "../../img/1.png", "tesdt",  100, 500, "name:Lsdddsi1111");
+       var u2 = new MobileUnit("2", "../../img/1.png", "tedst",  0, 0, "name:Lsdsi22222");
+       var u3 = new MobileUnit("3", "../../img/1.png", "tdest",  400, 500, "name:Lddssi33333");
+       var u4 = new MobileUnit("4", "../../img/1.png", "tesdt",  100, 300, "name:4444444444444");
+       // var u1 = {name:"test",imgSrc:"../../img/1.png", name:"oooooo", x:300, y:400, description:"1111111111"};
+
+       units =  [u1, u2, u3, u4] ;
+
+
+
+
+      window.onload = init(1, units);
+
+       document.getElementById("display").onchange =   function onSelectChange(){
+          clear();
+          var disMulriple = this.options[this.selectedIndex].value ;
+          var mulriple = (parseInt(disMulriple) / 4 + 1);
+          if(disMulriple == "0"){
+            mulriple = 0 ;
+          }
+         // alert(mulriple);
+          init(mulriple, units);
+         
+          };
+
+    </script>
+    
+  </body>
+</html>
