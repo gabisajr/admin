@@ -59,7 +59,7 @@
 
      var init = function(multiple, mobileUnits){
       
-        var list = []; //保存所有的图形
+        var list = []; 
         var currentUnit ;
 
        context =  getCanvasContext( {
@@ -71,7 +71,7 @@
         drawGrid(context);
       
         for (var i = mobileUnits.length - 1; i >= 0; i--) {
-           var u =   mobileUnits[i]; //object
+           var u =   mobileUnits[i]; 
           var obj = clone(u);
           var img = new Image();
           img.src = obj.imgSrc;
@@ -140,26 +140,25 @@
           context.moveTo(x,0);
           context.lineTo(x,600);
           }
-          //画横线
           for(var y=0.5;y<600;y += 10){
                  context.moveTo(0,y);
                  context.lineTo(950,y);
           }
-          context.strokeStyle = "#ccc"; //选择颜色
-          context.stroke();  //渲染
+          context.strokeStyle = "#ccc";
+          context.stroke(); 
        }
 
     
 
        function preImage(img,callback){  
 
-        if (img.complete) { // 如果图片已经存在于浏览器缓存，直接调用回调函数  
+        if (img.complete) {   
              callback.call(img);  
-            return; // 直接返回，不用再处理onload事件  
+            return;  
          }  
       
-         img.onload = function () { //图片下载完毕时异步调用callback函数。  
-             callback.call(img);//将回调函数的this替换为Image对象  
+         img.onload = function () { 
+             callback.call(img);
          };  
       }  
 
