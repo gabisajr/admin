@@ -6,7 +6,8 @@
     <style type="text/css">
       * {padding: 0; margin:0;}
     </style>
-         <link href="../../css/bootstrap.min.css" rel="stylesheet" media="screen">
+        <link href="../../css/bootstrap.min.css" rel="stylesheet" media="screen">
+
   
     <style type="text/css">
       canvas { border: 1px solid black; }
@@ -20,9 +21,9 @@
       <button class="btn btn-primary" type="button">Speak To Mobile Unit</button>
       Display:
       <select class="span2" id="display">
+        <option value="0">normal</option>
         <option value="1">25%</option>
         <option value="2">50%</option>
-        <option value="3">75%</option>
         <option value="4">100%</option>
       </select>
     </div>
@@ -51,11 +52,6 @@
 
 
   <script type="text/javascript">
-
-    function clone(src){
-      return JSON.parse(JSON.stringify(src));
-    }
-
      var init = function(multiple, mobileUnits){
       
         var list = []; //保存所有的图形
@@ -66,26 +62,13 @@
         scaleY : multiple
        })
        canvas = getCanvas();
-       drawGrid(context);
+
+        drawGrid(context);
       
         for (var i = mobileUnits.length - 1; i >= 0; i--) {
           var u =   mobileUnits[i]; //object
-          var obj = clone(u);
-          var img = new Image();
-          img.src = obj.imgSrc;
-          obj.image = img;
-          obj.isCurrent = false;
-          currentUnit = null;
-
-          obj.drawUnit = function(context){
-                context.width = img.width;
-                context.height = img.height;
-                   preImage(img,function(){
-                   context.drawImage(img, obj.x, obj.y);
-                });
-          };
-          obj.drawUnit(context);
-          list.push(obj);
+          u.drawUnit(context);
+          list.push(u);
         };
  
         function onMouseDwon(evt){
@@ -94,8 +77,7 @@
              if (evt.layerX || evt.layerX == 0) {   
                  g_x = evt.layerX ;   
                  g_y = evt.layerY ;   
-             }
-
+             }  
              for (var i = list.length - 1; i >= 0; i--) {
                  var temp  =  list[i];
                     if(g_x  >= parseInt(temp.x) &&  
@@ -103,7 +85,7 @@
                       g_y >= parseInt(temp.y) &&  
                       g_y <= parseInt(temp.y) + parseInt(temp.image.height)){  
                       currentUnit = temp;
-                  var showDiv =   document.getElementById("showDiv");
+                      var showDiv =   document.getElementById("showDiv");
                       showDiv.innerHTML = temp.description;
                     showDiv.style.display="block"; //div3初始状态是不可见的，设置可为可见   
                     //window.event代表事件状态，如事件发生的元素，键盘状态，鼠标位置和鼠标按钮状.   
@@ -161,32 +143,6 @@
           img.src = imgSrc;
           this.image = img;
           this.drawUnit = function(context){
-                //context.width = img.width;
-                //context.height = img.height;
-                   preImage(img,function(){
-                   context.drawImage(img,x,y);
-
-                });
-          }
-       }
-
-
-        // create mobileUnit object
-         function createMobileUnit(mobileUnit){
-         
-          var unit = new Object();
-          // this.imgSrc = imgSrc;
-          // this.name = name;
-          // this.description = description;
-          // this.id = id;
-          // this.isCurrent = false;
-          // currentUnit = null;
-          // this.x = x;
-          // this.y = y;
-          // var img = new Image();
-          // img.src = imgSrc;
-          // this.image = img;
-            unit.drawUnit = function(context){
                 context.width = img.width;
                 context.height = img.height;
                    preImage(img,function(){
@@ -196,13 +152,13 @@
           }
        }
 
+
        //make img loaded before canvas draw it 
        function preImage(img,callback){  
-        
         if (img.complete) { // 如果图片已经存在于浏览器缓存，直接调用回调函数  
              callback.call(img);  
-             return; // 直接返回，不用再处理onload事件  
-        }
+            return; // 直接返回，不用再处理onload事件  
+         }  
       
          img.onload = function () { //图片下载完毕时异步调用callback函数。  
              callback.call(img);//将回调函数的this替换为Image对象  
@@ -225,16 +181,22 @@
         return document.getElementById('tutorial');
       }
 
+      function clear(){
+          var context;
+          var canvas = getCanvas();
+         if (canvas.getContext){
+             context = canvas.getContext('2d');
+         }         
+         context.clearRect(0,0,950,600);
+      }
 
 
-       //var u1 = new MobileUnit("1", "img/1.png", "tesdt",  50, 50, "name:Lsdddsi1111");
-       // var u2 = new MobileUnit("2", "../../img/1.png", "tedst",  0, 0, "name:Lsdsi22222");
-       // var u3 = new MobileUnit("3", "../../img/1.png", "tdest",  400, 500, "name:Lddssi33333");
-       // var u4 = new MobileUnit("4", "../../img/1.png", "tesdt",  100, 300, "name:4444444444444");
-       var u1 = {id:"1",imgSrc:"../../img/1.png", name:"oooooo", x:300, y:400, description:"1111111111"};
-       var u2 = {id:"2",imgSrc:"../../img/1.png", name:"2222", x:0, y:0, description:"22222"};
-       var u3 = {id:"3",imgSrc:"../../img/1.png", name:"33", x:400, y:500, description:"333"};
-       var u4 = {id:"4",imgSrc:"../../img/1.png", name:"444", x:100, y:300, description:"444"};
+
+       var u1 = new MobileUnit("1", "../../img/1.png", "tesdt",  100, 500, "name:Lsdddsi1111");
+       var u2 = new MobileUnit("2", "../../img/1.png", "tedst",  0, 0, "name:Lsdsi22222");
+       var u3 = new MobileUnit("3", "../../img/1.png", "tdest",  400, 500, "name:Lddssi33333");
+       var u4 = new MobileUnit("4", "../../img/1.png", "tesdt",  100, 300, "name:4444444444444");
+       // var u1 = {name:"test",imgSrc:"../../img/1.png", name:"oooooo", x:300, y:400, description:"1111111111"};
 
        units =  [u1, u2, u3, u4] ;
 
@@ -244,9 +206,15 @@
       window.onload = init(1, units);
 
        document.getElementById("display").onchange =   function onSelectChange(){
+          clear();
           var disMulriple = this.options[this.selectedIndex].value ;
-            init(2, units);
-          //  alert("ddddddddddd");
+          var mulriple = (parseInt(disMulriple) / 4 + 1);
+          if(disMulriple == "0"){
+            mulriple = 0 ;
+          }
+         // alert(mulriple);
+          init(mulriple, units);
+         
           };
 
     </script>
